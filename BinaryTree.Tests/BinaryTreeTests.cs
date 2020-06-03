@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BinaryTree.Tests
 {
-    [TestFixtureSource(typeof(FixtureArgsClass), "FixtureArgs"), Timeout(1000)]
+    [TestFixtureSource(typeof(FixtureArgsClass), "FixtureArgs")]
     public class BinaryTreeTests<T>
     {
         private readonly T[] testData;
