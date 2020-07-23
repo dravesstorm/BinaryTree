@@ -106,7 +106,7 @@ namespace BinaryTree
         {
             BinaryTreeNode<T> current;
 
-            // Находим удаляемый узел.
+            // Find removal node
             current = FindWithParent(item, out BinaryTreeNode<T> parent);
 
             if (current == null)
@@ -116,7 +116,7 @@ namespace BinaryTree
 
             Count--;
 
-            // Случай 1: Если нет детей справа, левый ребенок встает на место удаляемого.
+            // Case 1: If there are no childs on right, left child will put on deleting place.
             if (current.Right == null)
             {
                 if (parent == null)
@@ -128,18 +128,18 @@ namespace BinaryTree
                     int result = Comparer.Compare(parent.Value, current.Value);
                     if (result > 0)
                     {
-                        // Если значение родителя больше текущего,
-                        // левый ребенок текущего узла становится левым ребенком родителя.
+                        // If value of parent higher than current,
+                        // Left child of current node becomes left child of parent node.
                         parent.Left = current.Left;
                     }
                     else if (result < 0)
-                    { // Если значение родителя меньше текущего, 
-                      //левый ребенок текущего узла становится правым ребенком родителя. 
+                    {   // If value of parent lower than current,
+                        // Left child of current node becomes right child of parent node.
                         parent.Right = current.Left;
                     }
                 }
             }
-            // Случай 2: Если у правого ребенка нет детей слева, то он занимает место удаляемого узла. 
+            //  Case 2: If right child has no childs on left side, so it will put on deleting place.
             else if (current.Right.Left == null)
             {
                 current.Right.Left = current.Left; if (parent == null) { root = current.Right; }
@@ -148,21 +148,21 @@ namespace BinaryTree
                     int result = Comparer.Compare(parent.Value, current.Value);
                     if (result > 0)
                     {
-                        // Если значение родителя больше текущего,
-                        // правый ребенок текущего узла становится левым ребенком родителя.
+                        // If value of parent higher than current,
+                        // Right child of current node becomes left child of parent node.
                         parent.Left = current.Right;
                     }
                     else if (result < 0)
-                    { // Если значение родителя меньше текущего, 
-                        // правый ребенок текущего узла становится правым ребенком родителя. 
+                    {   // If value of parent lower than current,
+                        // Right child of current node becomes right child of parent node. 
                         parent.Right = current.Right;
                     }
                 }
             }
-            // Случай 3: Если у правого ребенка есть дети слева, крайний левый ребенок 
-            // из правого поддерева заменяет удаляемый узел. 
+            // Case 3: If right child has childs on left side, so last left child
+            // from right subtree will put on deleting place. 
             else
-            { // Найдем крайний левый узел. 
+            { // Find last left node. 
                 BinaryTreeNode<T> leftmost = current.Right.Left;
                 BinaryTreeNode<T> leftmostParent = current.Right;
                 while (leftmost.Left != null)
@@ -170,9 +170,9 @@ namespace BinaryTree
                     leftmostParent = leftmost;
                     leftmost = leftmost.Left;
                 }
-                // Левое поддерево родителя становится правым поддеревом крайнего левого узла.
+                // Left subtree of parent becomes right subtree of last left node.
                 leftmostParent.Left = leftmost.Right;
-                // Левый и правый ребенок текущего узла становится левым и правым ребенком крайнего левого. 
+                // Left or right child of current node becomes Left or right child of the last left node. 
                 leftmost.Left = current.Left;
                 leftmost.Right = current.Right;
                 if (parent == null)
@@ -184,14 +184,14 @@ namespace BinaryTree
                     int result = Comparer.Compare(parent.Value, current.Value);
                     if (result > 0)
                     {
-                        // Если значение родителя больше текущего,
-                        // крайний левый узел становится левым ребенком родителя.
+                        // If value of parent lower than current,
+                        // last Left child of current node becomes Left child of parent node.
                         parent.Left = leftmost;
                     }
                     else if (result < 0)
                     {
-                        // Если значение родителя меньше текущего,
-                        // крайний левый узел становится правым ребенком родителя.
+                        // If value of parent lower than current,
+                        // last Left child of current node becomes Right child of parent node.
                         parent.Right = leftmost;
                     }
                 }
@@ -293,30 +293,29 @@ namespace BinaryTree
         /// 
         private BinaryTreeNode<T> FindWithParent(T value, out BinaryTreeNode<T> parent)
         {
-            // Попробуем найти значение в дереве.
             BinaryTreeNode<T> current = root;
             parent = null;
 
-            // До тех пор, пока не нашли...
+            // While not found...
             while (current != null)
             {
                 int result = Comparer.Compare(current.Value, value);
 
                 if (result > 0)
                 {
-                    // Если искомое значение меньше, идем налево.
+                    // If value is lower, go left.
                     parent = current;
                     current = current.Left;
                 }
                 else if (result < 0)
                 {
-                    // Если искомое значение больше, идем направо.
+                    // If value is higher, go right.
                     parent = current;
                     current = current.Right;
                 }
                 else
                 {
-                    // Если равны, то останавливаемся
+                    // If equals -> break
                     break;
                 }
             }
@@ -396,29 +395,29 @@ namespace BinaryTree
 
         public IEnumerator<T> InOrderTraversal()
         {
-            // Это нерекурсивный алгоритм.
-            // Он использует стек для того, чтобы избежать рекурсии.
+            // This is non-recursive algorithm
+            // It uses stack to avoid recursion
             if (root != null)
             {
-                // Стек для сохранения пропущенных узлов.
+                // Stack to save missing nodes
                 Stack stack = new Stack();
 
                 BinaryTreeNode<T> current = root;
 
-                // Когда мы избавляемся от рекурсии, нам необходимо
-                // запоминать, в какую стороны мы должны двигаться.
+                // When we avoid recursion, we have to  
+                // remember, which side we are moving
                 bool goLeftNext = true;
 
-                // Кладем в стек корень.
+                // Put root into stack
                 stack.Push(current);
 
                 while (stack.Count > 0)
                 {
-                    // Если мы идем налево...
+                    // If we go left
                     if (goLeftNext)
                     {
-                        // Кладем все, кроме самого левого узла на стек.
-                        // Крайний левый узел мы вернем с помощю yield.
+                        // Put all, except last left node into stack.
+                        // Last left node we'll return with yield.
                         while (current.Left != null)
                         {
                             stack.Push(current);
@@ -426,22 +425,22 @@ namespace BinaryTree
                         }
                     }
 
-                    // Префиксный порядок: left->yield->right.
+                    // InOrder Traversal : left->yield->right.
                     yield return current.Value;
 
-                    // Если мы можем пойти направо, идем.
+                    // If we have right nodes, we go.
                     if (current.Right != null)
                     {
                         current = current.Right;
 
-                        // После того, как мы пошли направо один раз,
-                        // мы должным снова пойти налево.
+                        // After we went right one time,
+                        // we need to go left again.
                         goLeftNext = true;
                     }
                     else
                     {
-                        // Если мы не можем пойти направо, мы должны достать родительский узел
-                        // со стека, обработать его и идти в его правого ребенка.
+                        // If we cant go to right path, we need to take parent node
+                        // from stack, explore it and go to its right child.
                         current = stack.Pop() as BinaryTreeNode<T>;
                         goLeftNext = false;
                     }
