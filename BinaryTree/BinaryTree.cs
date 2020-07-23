@@ -330,66 +330,67 @@ namespace BinaryTree
         /// <returns>Sequense of elements of tree according to traverse type</returns>
         public IEnumerable<T> Traverse(TraverseType traverseType)
         {
+            List<T> res = new List<T>();
             switch (traverseType)
             {
-                case TraverseType.InOrder:
-                    InOrderTraversal((root) => { });
-                    return this;
+                case TraverseType.InOrder:                    
+                    InOrderTraversal(res);
+                    return res.ToArray<T>();
                 case TraverseType.PreOrder:
-                    PreOrderTraversal((root) => { });
-                    return this;
+                    PreOrderTraversal(res);
+                    return res.ToArray<T>();
                 case TraverseType.PostOrder:
-                    PostOrderTraversal((root) => { });
-                    return this;
+                    PostOrderTraversal(res);
+                    return res.ToArray<T>();
                 default:
                     throw new ArgumentException("traverseType");
             }
         }
 
-        private void InOrderTraversal(Action<T> action)
+        private void InOrderTraversal(List<T> container)
         {
-            InOrderTraversal(action, root);
+            InOrderTraversal(container, root);
         }
 
-        private void InOrderTraversal(Action<T> action, BinaryTreeNode<T> node)
+        private void InOrderTraversal(List<T> container, BinaryTreeNode<T> node)
         {
             if (node != null)
             {
-                InOrderTraversal(action, node.Left);
+                InOrderTraversal(container, node.Left);
 
-                action(node.Value);
+                container.Add(node.Value);
 
-                InOrderTraversal(action, node.Right);
+                InOrderTraversal(container, node.Right);
             }
         }
 
-        private void PreOrderTraversal(Action<T> action)
+        private void PreOrderTraversal(List<T> container)
         {
-            PreOrderTraversal(action, root);
+            PreOrderTraversal(container, root);
         }
 
-        private void PreOrderTraversal(Action<T> action, BinaryTreeNode<T> node)
+        private void PreOrderTraversal(List<T> container, BinaryTreeNode<T> node)
         {
             if (node != null)
             {
-                action(node.Value);
-                PreOrderTraversal(action, node.Left);
-                PreOrderTraversal(action, node.Right);
+                container.Add(node.Value);
+                PreOrderTraversal(container, node.Left);
+                PreOrderTraversal(container, node.Right);
             }
         }
 
-        private void PostOrderTraversal(Action<T> action)
+        private void PostOrderTraversal(List<T> container)
         {
-            PostOrderTraversal(action, root);
+            PostOrderTraversal(container, root);
         }
 
-        private void PostOrderTraversal(Action<T> action, BinaryTreeNode<T> node)
+        private void PostOrderTraversal(List<T> container, BinaryTreeNode<T> node)
         {
             if (node != null)
             {
-                PostOrderTraversal(action, node.Left);
-                PostOrderTraversal(action, node.Right);
-                action(node.Value);
+                PostOrderTraversal(container, node.Left);
+                PostOrderTraversal(container, node.Right);
+                container.Add(node.Value);
             }
         }
 
